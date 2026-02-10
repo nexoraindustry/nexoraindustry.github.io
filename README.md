@@ -98,5 +98,5 @@ All rights reserved by Nexora Global Pvt Ltd.
 ## Support
 
 For support or customization requests, contact:
-- Email: hello@nexoraglobal.com
+- Email: nexoraindustries@gmail.com
 - Phone: +91 6393741885
