@@ -1,6 +1,7 @@
 /**
  * Nexora Global Website - Main JavaScript File
- * Version: 1.2.0
+ * Version: 1.4.0
+ * Updated: Formspree integration fixed
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -170,8 +171,16 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Get form data
-            const formData = new FormData(this);
+            // Get form values
+            const formData = {
+                name: this.querySelector('[name="name"]').value.trim(),
+                email: this.querySelector('[name="email"]').value.trim(),
+                phone: this.querySelector('[name="phone"]').value.trim(),
+                service: this.querySelector('[name="service"]').value,
+                message: this.querySelector('[name="message"]').value.trim(),
+                _subject: "New Contact Form Submission from Nexora Global",
+                _replyto: this.querySelector('[name="email"]').value.trim()
+            };
             
             // Simple validation
             let isValid = true;
@@ -180,9 +189,9 @@ document.addEventListener('DOMContentLoaded', function() {
             requiredFields.forEach(field => {
                 const input = this.querySelector(`[name="${field}"]`);
                 const errorElement = this.querySelector(`.error-${field}`);
-                const value = formData.get(field);
+                const value = formData[field];
                 
-                if (!value || value.trim() === '') {
+                if (!value || value === '') {
                     isValid = false;
                     input.style.borderColor = '#ff4757';
                     input.style.boxShadow = '0 0 0 2px rgba(255, 71, 87, 0.2)';
@@ -223,17 +232,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.disabled = true;
                 
                 try {
+                    // Convert to URLSearchParams (form-urlencoded)
+                    const formDataEncoded = new URLSearchParams();
+                    Object.keys(formData).forEach(key => {
+                        if (formData[key]) {
+                            formDataEncoded.append(key, formData[key]);
+                        }
+                    });
+                    
                     // Send to Formspree
-                    const response = await fetch(this.action, {
+                    const response = await fetch('https://formspree.io/f/mvzbzpyo', {
                         method: 'POST',
-                        body: formData,
+                        body: formDataEncoded,
                         headers: {
                             'Accept': 'application/json',
                             'Content-Type': 'application/x-www-form-urlencoded'
                         }
                     });
                     
-                    // Add shake animation
+                    // Add shake animation style
                     const shakeStyle = document.createElement('style');
                     shakeStyle.textContent = `
                         @keyframes shake {
@@ -307,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         }, 8000);
                     } else {
-                        throw new Error('Form submission failed');
+                        throw new Error(`Form submission failed: ${response.status}`);
                     }
                 } catch (error) {
                     console.error('Form submission error:', error);
@@ -711,6 +728,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // ===== Initialize CTA Enhancement =====
     enhanceCTASections();
     
+    // ===== Test Formspree Connection =====
+    function testFormspreeConnection() {
+        console.log('Testing Formspree connection...');
+        
+        const testData = new URLSearchParams();
+        testData.append('name', 'Test User');
+        testData.append('email', 'test@example.com');
+        testData.append('message', 'Testing Formspree connection');
+        testData.append('_subject', 'Formspree Connection Test');
+        testData.append('_replyto', 'test@example.com');
+        
+        fetch('https://formspree.io/f/mvzbzpyo', {
+            method: 'POST',
+            body: testData,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('✅ Formspree connection successful!');
+            } else {
+                console.log('❌ Formspree connection failed');
+            }
+        })
+        .catch(error => {
+            console.log('❌ Formspree connection error:', error);
+        });
+    }
+    
+    // Uncomment to test Formspree on page load
+    // setTimeout(testFormspreeConnection, 5000);
+    
     // ===== Page Load Animation =====
     window.addEventListener('load', () => {
         document.body.style.opacity = '0';
@@ -719,5 +770,53 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             document.body.style.opacity = '1';
         }, 100);
+        
+        console.log('Formspree endpoint: https://formspree.io/f/mvzbzpyo');
     });
 });
+
+// Alternative: Traditional form submission (works without JavaScript)
+function submitFormTraditional(form) {
+    // This function can be used as a fallback
+    const formData = new URLSearchParams(new FormData(form));
+    
+    // Add Formspree specific fields
+    const email = form.querySelector('[name="email"]').value;
+    if (email) {
+        formData.append('_replyto', email);
+    }
+    formData.append('_subject', 'New Contact Form Submission from Nexora Global');
+    
+    // Create a hidden iframe for submission
+    const iframe = document.createElement('iframe');
+    iframe.name = 'formspree-submit-' + Date.now();
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    
+    // Create a form for traditional submission
+    const submitForm = document.createElement('form');
+    submitForm.method = 'POST';
+    submitForm.action = 'https://formspree.io/f/mvzbzpyo';
+    submitForm.target = iframe.name;
+    submitForm.style.display = 'none';
+    
+    // Add all form data as hidden inputs
+    formData.forEach((value, key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        submitForm.appendChild(input);
+    });
+    
+    document.body.appendChild(submitForm);
+    submitForm.submit();
+    
+    // Clean up
+    setTimeout(() => {
+        iframe.remove();
+        submitForm.remove();
+    }, 5000);
+    
+    return false;
+}
