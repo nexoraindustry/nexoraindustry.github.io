@@ -92,11 +92,8 @@
     <h2>Send us a Message</h2>
     <p>Fill out the form below and we'll get back to you within 24 hours.</p>
     
-    <form id="contactForm" action="https://formspree.io/f/xqarbzvb" method="POST">
-        <input type="hidden" name="_subject" value="New Contact Form Submission from Nexora Global">
-        <input type="hidden" name="_replyto" value="email">
-        <input type="text" name="_gotcha" style="display:none">
-        
+    <!-- Updated Form with correct Formspree endpoint -->
+    <form id="contactForm" action="https://formspree.io/f/mvzbzpyo" method="POST">
         <div class="form-group">
             <label for="name">Full Name *</label>
             <input type="text" id="name" name="name" class="form-control" placeholder="Your full name" required>
@@ -133,6 +130,11 @@
             <textarea id="message" name="message" class="form-control" placeholder="Tell us about your project requirements..." rows="5" required></textarea>
             <div class="error-message" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
         </div>
+        
+        <!-- Hidden fields for Formspree -->
+        <input type="hidden" name="_subject" value="New Contact Form Submission from Nexora Global">
+        <input type="hidden" name="_replyto" value="%email%"> <!-- This will be auto-filled by Formspree -->
+        <input type="text" name="_gotcha" style="display:none">
         
         <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
             Send Message <i class="fas fa-paper-plane"></i>
