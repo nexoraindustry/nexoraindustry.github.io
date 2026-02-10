@@ -721,36 +721,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     });
 });
-
-// ===== Test Formspree Connection =====
-async function testFormspreeConnection() {
-    console.log('Testing Formspree connection...');
-    try {
-        const testData = new URLSearchParams();
-        testData.append('_replyto', 'test@example.com');
-        testData.append('message', 'Test connection from Nexora Global');
-        testData.append('_subject', 'Formspree Connection Test');
-        
-        const response = await fetch('https://formspree.io/f/mvzbzpyo', {
-            method: 'POST',
-            body: testData,
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-        
-        if (response.ok) {
-            console.log('✅ Formspree connection successful!');
-            return true;
-        } else {
-            console.log('❌ Formspree connection failed:', response.status);
-            return false;
-        }
-    } catch (error) {
-        console.log('❌ Formspree connection error:', error);
-        return false;
-    }
-}
-
-// Uncomment to test when needed
-testFormspreeConnection();
