@@ -72,69 +72,73 @@
         </div>
     </header>
 
-    <!-- Page Hero -->
-    <section class="page-hero">
-        <div class="container">
-            <h1>Contact Us</h1>
-            <p>Get in touch for website development services and quotes</p>
-            <div class="breadcrumb">
-                <a href="index.html">Home</a> / <span>Contact</span>
-            </div>
+<!-- Page Hero -->
+<section class="page-hero" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y29udGFjdCUyMHVzfGVufDB8fDB8fHww'); background-size: cover; background-position: center;">
+    <div class="container">
+        <h1>Contact Us</h1>
+        <p style="color: #f0f0f0;">Get in touch for website development services and quotes</p>
+        <div class="breadcrumb" style="color: #ddd;">
+            <a href="index.html" style="color: #ddd;">Home</a> / <span>Contact</span>
         </div>
-    </section>
+    </div>
+</section>
 
     <!-- Contact Section -->
     <section class="contact section">
         <div class="container">
             <div class="contact-grid">
-                <!-- Contact Form -->
-                <div class="contact-form fade-in-up">
-                    <h2>Send us a Message</h2>
-                    <p>Fill out the form below and we'll get back to you within 24 hours.</p>
-                    
-                    <form id="contactForm" action="https://formspree.io/f/mvzbzpyo" method="POST">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="Your full name" required>
-                            <div class="error-name" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
-                            <div class="error-email" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 1234567890">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="service">Service Interested In</label>
-                            <select id="service" name="service" class="form-control">
-                                <option value="">Select a service</option>
-                                <option value="static">Static Website Development</option>
-                                <option value="dynamic">Dynamic Website Development</option>
-                                <option value="ecommerce">E-commerce Development</option>
-                                <option value="custom">Custom Web Application</option>
-                                <option value="design">UI/UX Design</option>
-                                <option value="maintenance">Website Maintenance</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Your Message *</label>
-                            <textarea id="message" name="message" class="form-control" placeholder="Tell us about your project requirements..." rows="5" required></textarea>
-                            <div class="error-message" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
-                            Send Message <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
+<!-- Contact Form Section -->
+<div class="contact-form fade-in-up">
+    <h2>Send us a Message</h2>
+    <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+    
+    <form id="contactForm" action="https://formspree.io/f/xqarbzvb" method="POST">
+        <input type="hidden" name="_subject" value="New Contact Form Submission from Nexora Global">
+        <input type="hidden" name="_replyto" value="email">
+        <input type="text" name="_gotcha" style="display:none">
+        
+        <div class="form-group">
+            <label for="name">Full Name *</label>
+            <input type="text" id="name" name="name" class="form-control" placeholder="Your full name" required>
+            <div class="error-name" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
+            <div class="error-email" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" class="form-control" placeholder="+91 1234567890">
+        </div>
+        
+        <div class="form-group">
+            <label for="service">Service Interested In</label>
+            <select id="service" name="service" class="form-control">
+                <option value="">Select a service</option>
+                <option value="static">Static Website Development</option>
+                <option value="dynamic">Dynamic Website Development</option>
+                <option value="ecommerce">E-commerce Development</option>
+                <option value="custom">Custom Web Application</option>
+                <option value="design">UI/UX Design</option>
+                <option value="maintenance">Website Maintenance</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="message">Your Message *</label>
+            <textarea id="message" name="message" class="form-control" placeholder="Tell us about your project requirements..." rows="5" required></textarea>
+            <div class="error-message" style="color: #ff4757; display: none; font-size: 0.875rem; margin-top: 0.25rem;"></div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">
+            Send Message <i class="fas fa-paper-plane"></i>
+        </button>
+    </form>
+</div>
                 
                 <!-- Contact Information -->
                 <div class="contact-info-card fade-in-up delay-100">

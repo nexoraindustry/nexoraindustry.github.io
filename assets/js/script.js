@@ -1,6 +1,6 @@
 /**
  * Nexora Global Website - Main JavaScript File
- * Version: 1.0.0
+ * Version: 1.2.0
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -59,16 +59,119 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // ===== Enhanced CTA Section Styling =====
+    function enhanceCTASections() {
+        const ctaSections = document.querySelectorAll('.cta-section');
+        
+        ctaSections.forEach(section => {
+            // Add background pattern
+            section.style.background = `
+                linear-gradient(135deg, rgba(0, 212, 255, 0.9) 0%, rgba(108, 99, 255, 0.9) 100%),
+                url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')
+            `;
+            section.style.backgroundSize = 'cover';
+            section.style.backgroundPosition = 'center';
+            section.style.position = 'relative';
+            section.style.overflow = 'hidden';
+            
+            // Add floating particles effect
+            const particlesContainer = document.createElement('div');
+            particlesContainer.className = 'cta-particles';
+            particlesContainer.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                pointer-events: none;
+            `;
+            
+            // Create particles
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    background: rgba(255, 255, 255, 0.2);
+                    border-radius: 50%;
+                    animation: floatParticle ${3 + Math.random() * 4}s infinite ease-in-out;
+                    animation-delay: ${Math.random() * 2}s;
+                `;
+                
+                const size = 10 + Math.random() * 20;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            section.appendChild(particlesContainer);
+            
+            // Enhance CTA content
+            const ctaContent = section.querySelector('.cta-content');
+            if (ctaContent) {
+                ctaContent.style.position = 'relative';
+                ctaContent.style.zIndex = '2';
+                ctaContent.style.textShadow = '0 2px 4px rgba(0, 0, 0, 0.3)';
+                
+                // Enhance buttons
+                const buttons = section.querySelectorAll('.btn');
+                buttons.forEach(btn => {
+                    if (btn.classList.contains('btn-primary')) {
+                        btn.style.background = 'white';
+                        btn.style.color = '#6c63ff';
+                        btn.style.border = '2px solid white';
+                        btn.style.fontWeight = '600';
+                        btn.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+                    } else if (btn.classList.contains('btn-secondary')) {
+                        btn.style.background = 'transparent';
+                        btn.style.color = 'white';
+                        btn.style.border = '2px solid rgba(255, 255, 255, 0.7)';
+                        btn.style.backdropFilter = 'blur(10px)';
+                    }
+                    
+                    // Add hover effects
+                    btn.addEventListener('mouseenter', () => {
+                        btn.style.transform = 'translateY(-3px) scale(1.05)';
+                        btn.style.transition = 'all 0.3s ease';
+                    });
+                    
+                    btn.addEventListener('mouseleave', () => {
+                        btn.style.transform = 'translateY(0) scale(1)';
+                    });
+                });
+            }
+            
+            // Add floating animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes floatParticle {
+                    0%, 100% {
+                        transform: translateY(0) translateX(0) rotate(0deg);
+                    }
+                    33% {
+                        transform: translateY(-20px) translateX(10px) rotate(120deg);
+                    }
+                    66% {
+                        transform: translateY(10px) translateX(-10px) rotate(240deg);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    }
+    
     // ===== Form Validation and Submission =====
     const contactForm = document.getElementById('contactForm');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Get form data
             const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
             
             // Simple validation
             let isValid = true;
@@ -77,16 +180,20 @@ document.addEventListener('DOMContentLoaded', function() {
             requiredFields.forEach(field => {
                 const input = this.querySelector(`[name="${field}"]`);
                 const errorElement = this.querySelector(`.error-${field}`);
+                const value = formData.get(field);
                 
-                if (!data[field] || data[field].trim() === '') {
+                if (!value || value.trim() === '') {
                     isValid = false;
                     input.style.borderColor = '#ff4757';
+                    input.style.boxShadow = '0 0 0 2px rgba(255, 71, 87, 0.2)';
                     if (errorElement) {
                         errorElement.textContent = 'This field is required';
                         errorElement.style.display = 'block';
+                        errorElement.style.animation = 'shake 0.5s ease';
                     }
                 } else {
                     input.style.borderColor = '';
+                    input.style.boxShadow = '';
                     if (errorElement) {
                         errorElement.style.display = 'none';
                     }
@@ -94,12 +201,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Email validation
                     if (field === 'email') {
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(data[field])) {
+                        if (!emailRegex.test(value)) {
                             isValid = false;
                             input.style.borderColor = '#ff4757';
+                            input.style.boxShadow = '0 0 0 2px rgba(255, 71, 87, 0.2)';
                             if (errorElement) {
                                 errorElement.textContent = 'Please enter a valid email address';
                                 errorElement.style.display = 'block';
+                                errorElement.style.animation = 'shake 0.5s ease';
                             }
                         }
                     }
@@ -109,38 +218,301 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isValid) {
                 // Show loading state
                 const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.textContent;
-                submitBtn.textContent = 'Sending...';
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
                 submitBtn.disabled = true;
                 
-                // In a real application, you would send the data to a server here
-                // For demo purposes, we'll simulate an API call
-                setTimeout(() => {
-                    // Show success message
-                    const successMessage = document.createElement('div');
-                    successMessage.className = 'success-message';
-                    successMessage.innerHTML = `
-                        <div style="background: rgba(46, 204, 113, 0.1); border: 1px solid #2ecc71; border-radius: 8px; padding: 1rem; color: #2ecc71; margin-top: 1rem;">
-                            <i class="fas fa-check-circle"></i> Thank you! Your message has been sent successfully. We'll get back to you soon.
+                try {
+                    // Send to Formspree
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    // Add shake animation
+                    const shakeStyle = document.createElement('style');
+                    shakeStyle.textContent = `
+                        @keyframes shake {
+                            0%, 100% { transform: translateX(0); }
+                            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                            20%, 40%, 60%, 80% { transform: translateX(5px); }
+                        }
+                    `;
+                    document.head.appendChild(shakeStyle);
+                    
+                    if (response.ok) {
+                        // Show success message with animation
+                        const successMessage = document.createElement('div');
+                        successMessage.className = 'success-message';
+                        successMessage.style.cssText = `
+                            animation: slideDown 0.6s ease forwards;
+                            margin-top: 1.5rem;
+                        `;
+                        successMessage.innerHTML = `
+                            <div style="
+                                background: linear-gradient(135deg, rgba(46, 204, 113, 0.15) 0%, rgba(39, 174, 96, 0.15) 100%);
+                                border: 2px solid #2ecc71;
+                                border-radius: 12px;
+                                padding: 1.5rem;
+                                color: #2ecc71;
+                                display: flex;
+                                align-items: center;
+                                gap: 1rem;
+                                box-shadow: 0 10px 30px rgba(46, 204, 113, 0.2);
+                            ">
+                                <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+                                <div>
+                                    <strong style="display: block; margin-bottom: 0.5rem; font-size: 1.1rem;">
+                                        Message Sent Successfully!
+                                    </strong>
+                                    <span style="color: #27ae60;">
+                                        Thank you! Your message has been sent. We'll get back to you within 24 hours.
+                                    </span>
+                                </div>
+                            </div>
+                        `;
+                        
+                        // Remove any existing messages
+                        const existingMessages = this.querySelectorAll('.success-message, .error-message');
+                        existingMessages.forEach(msg => msg.remove());
+                        
+                        this.appendChild(successMessage);
+                        
+                        // Reset form
+                        this.reset();
+                        
+                        // Add confetti effect
+                        createConfetti();
+                        
+                        // Scroll to success message
+                        setTimeout(() => {
+                            successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300);
+                        
+                        // Reset button
+                        setTimeout(() => {
+                            submitBtn.innerHTML = originalText;
+                            submitBtn.disabled = false;
+                        }, 1500);
+                        
+                        // Remove success message after 8 seconds
+                        setTimeout(() => {
+                            if (successMessage.parentNode) {
+                                successMessage.style.animation = 'slideUp 0.6s ease forwards';
+                                setTimeout(() => successMessage.remove(), 600);
+                            }
+                        }, 8000);
+                    } else {
+                        throw new Error('Form submission failed');
+                    }
+                } catch (error) {
+                    console.error('Form submission error:', error);
+                    
+                    // Show error message
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'error-message';
+                    errorMessage.style.cssText = `
+                        animation: slideDown 0.6s ease forwards;
+                        margin-top: 1.5rem;
+                    `;
+                    errorMessage.innerHTML = `
+                        <div style="
+                            background: linear-gradient(135deg, rgba(255, 71, 87, 0.15) 0%, rgba(231, 76, 60, 0.15) 100%);
+                            border: 2px solid #ff4757;
+                            border-radius: 12px;
+                            padding: 1.5rem;
+                            color: #ff4757;
+                            display: flex;
+                            align-items: center;
+                            gap: 1rem;
+                            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.2);
+                        ">
+                            <i class="fas fa-exclamation-circle" style="font-size: 1.5rem;"></i>
+                            <div>
+                                <strong style="display: block; margin-bottom: 0.5rem; font-size: 1.1rem;">
+                                    Submission Failed
+                                </strong>
+                                <span style="color: #e74c3c;">
+                                    Oops! Something went wrong. Please try again or contact us directly at 
+                                    <a href="mailto:nexoraindustries@gmail.com" style="color: #ff4757; text-decoration: underline;">
+                                        nexoraindustries@gmail.com
+                                    </a>
+                                </span>
+                            </div>
                         </div>
                     `;
                     
-                    this.appendChild(successMessage);
+                    // Remove any existing messages
+                    const existingMessages = this.querySelectorAll('.success-message, .error-message');
+                    existingMessages.forEach(msg => msg.remove());
                     
-                    // Reset form
-                    this.reset();
+                    this.appendChild(errorMessage);
+                    
+                    // Scroll to error message
+                    setTimeout(() => {
+                        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
                     
                     // Reset button
-                    submitBtn.textContent = originalText;
+                    submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                     
-                    // Remove success message after 5 seconds
+                    // Remove error message after 10 seconds
                     setTimeout(() => {
-                        successMessage.remove();
-                    }, 5000);
-                }, 1500);
+                        if (errorMessage.parentNode) {
+                            errorMessage.style.animation = 'slideUp 0.6s ease forwards';
+                            setTimeout(() => errorMessage.remove(), 600);
+                        }
+                    }, 10000);
+                }
+                
+                // Add animations
+                const animStyle = document.createElement('style');
+                animStyle.textContent = `
+                    @keyframes slideDown {
+                        from {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                    }
+                    
+                    @keyframes slideUp {
+                        from {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
+                        to {
+                            opacity: 0;
+                            transform: translateY(-20px);
+                        }
+                    }
+                `;
+                document.head.appendChild(animStyle);
+            } else {
+                // Add shake animation to invalid fields
+                const invalidFields = this.querySelectorAll('.form-control[style*="border-color: #ff4757"]');
+                invalidFields.forEach(field => {
+                    field.style.animation = 'shake 0.5s ease';
+                    setTimeout(() => {
+                        field.style.animation = '';
+                    }, 500);
+                });
             }
         });
+        
+        // Real-time validation
+        const formInputs = contactForm.querySelectorAll('.form-control');
+        formInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                const errorElement = contactForm.querySelector(`.error-${this.name}`);
+                
+                if (this.value.trim() === '') {
+                    this.style.borderColor = '#ff4757';
+                    if (errorElement) {
+                        errorElement.textContent = 'This field is required';
+                        errorElement.style.display = 'block';
+                    }
+                } else {
+                    this.style.borderColor = '';
+                    if (errorElement) {
+                        errorElement.style.display = 'none';
+                    }
+                    
+                    // Email validation on blur
+                    if (this.type === 'email' && this.value.trim() !== '') {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(this.value)) {
+                            this.style.borderColor = '#ff4757';
+                            if (errorElement) {
+                                errorElement.textContent = 'Please enter a valid email address';
+                                errorElement.style.display = 'block';
+                            }
+                        }
+                    }
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.style.borderColor = '#00d4ff';
+                    const errorElement = contactForm.querySelector(`.error-${this.name}`);
+                    if (errorElement) {
+                        errorElement.style.display = 'none';
+                    }
+                }
+            });
+        });
+    }
+    
+    // ===== Confetti Effect =====
+    function createConfetti() {
+        const confettiContainer = document.createElement('div');
+        confettiContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        `;
+        
+        document.body.appendChild(confettiContainer);
+        
+        const colors = ['#00d4ff', '#6c63ff', '#2ecc71', '#ff4757', '#ffdd59'];
+        
+        for (let i = 0; i < 150; i++) {
+            const confetti = document.createElement('div');
+            const size = Math.random() * 10 + 5;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            confetti.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: ${color};
+                border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                top: -20px;
+                left: ${Math.random() * 100}vw;
+                opacity: ${Math.random() * 0.7 + 0.3};
+                animation: confettiFall ${Math.random() * 3 + 2}s linear forwards;
+                transform: rotate(${Math.random() * 360}deg);
+            `;
+            
+            confettiContainer.appendChild(confetti);
+            
+            // Random horizontal movement
+            confetti.style.setProperty('--tx', `${(Math.random() - 0.5) * 200}px`);
+        }
+        
+        // Add confetti animation
+        const confettiStyle = document.createElement('style');
+        confettiStyle.textContent = `
+            @keyframes confettiFall {
+                0% {
+                    transform: translate(0, 0) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(var(--tx, 0), 100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(confettiStyle);
+        
+        // Remove confetti after animation
+        setTimeout(() => {
+            confettiContainer.remove();
+            confettiStyle.remove();
+        }, 3000);
     }
     
     // ===== Animate Elements on Scroll =====
@@ -159,7 +531,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
     
     // Observe elements for animation
-    document.querySelectorAll('.service-card, .reason-card, .tech-item, .project-card').forEach(el => {
+    document.querySelectorAll('.service-card, .reason-card, .tech-item, .project-card, .value-card, .service-card-detailed').forEach(el => {
         observer.observe(el);
     });
     
@@ -227,20 +599,22 @@ document.addEventListener('DOMContentLoaded', function() {
         position: fixed;
         bottom: 30px;
         right: 30px;
-        width: 50px;
-        height: 50px;
-        background: var(--color-accent-gradient);
-        color: var(--color-primary);
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #00d4ff 0%, #6c63ff 100%);
+        color: white;
         border: none;
         border-radius: 50%;
         cursor: pointer;
         display: none;
         align-items: center;
         justify-content: center;
-        font-size: 1.25rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease;
+        font-size: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         z-index: 1000;
+        opacity: 0;
+        transform: scale(0.8);
     `;
     
     document.body.appendChild(backToTopBtn);
@@ -252,11 +626,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    backToTopBtn.addEventListener('mouseenter', () => {
+        backToTopBtn.style.transform = 'scale(1.1) rotate(5deg)';
+    });
+    
+    backToTopBtn.addEventListener('mouseleave', () => {
+        backToTopBtn.style.transform = 'scale(1) rotate(0)';
+    });
+    
     window.addEventListener('scroll', () => {
         if (window.pageYOffset > 300) {
             backToTopBtn.style.display = 'flex';
+            setTimeout(() => {
+                backToTopBtn.style.opacity = '1';
+                backToTopBtn.style.transform = 'scale(1)';
+            }, 10);
         } else {
-            backToTopBtn.style.display = 'none';
+            backToTopBtn.style.opacity = '0';
+            backToTopBtn.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                if (window.pageYOffset <= 300) {
+                    backToTopBtn.style.display = 'none';
+                }
+            }, 300);
         }
     });
     
@@ -314,4 +706,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }, { threshold: 0.5 });
     
     counters.forEach(counter => counterObserver.observe(counter));
+    
+    // ===== Initialize CTA Enhancement =====
+    enhanceCTASections();
+    
+    // ===== Page Load Animation =====
+    window.addEventListener('load', () => {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.5s ease';
+        
+        setTimeout(() => {
+            document.body.style.opacity = '1';
+        }, 100);
+    });
 });
