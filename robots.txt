@@ -1,4 +1,40 @@
 User-agent: *
 Allow: /
+Disallow: /search
+Disallow: /private/
 
+# Crawl delay for respectful crawling
+Crawl-delay: 2
+
+# Sitemaps
 Sitemap: https://nexoraindustry.github.io/sitemap.xml
+
+# Host
+Host: https://nexoraindustry.github.io
+
+# Specific bots instructions
+User-agent: Googlebot
+Allow: /
+Disallow: /search
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Disallow: /search
+Crawl-delay: 2
+
+User-agent: Slurp
+Allow: /
+Disallow: /search
+Crawl-delay: 3
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /search
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Disallow: /
+
+User-agent: YandexBot
+Disallow: /
